@@ -18,16 +18,30 @@ class RoomList extends Component {
         });
     }
 
+    createRoom = (e) => {this.setState({ newRoomName: e.target.value });
+    }
+
+    handleSubmit = (newRoomName) => {
+    this.roomsRef.push({
+        name: newRoomName
+    });
+    this.setState({newRoomName: ""});
+}
+
     render() {
         return (
             <div>
-                <ul className="listRooms">
+                <ul className="list-rooms">
                     {this.state.rooms.map((room) =>
                     <li key={room.key}>{room.name}</li>)}
                 </ul>
+                <form className="create-room-form" onSubmit={ (e) => {this.handleSubmit(this.state.newRoomName)} }>
+                    <input type="text" placeholder="Enter New Room Name" value={this.state.newRoomName} onChange={this.createRoom} />
+                    <button className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Create New Room</button>
+                </form>
             </div>
         );
-    }
+}
 }
 
 export default RoomList;
