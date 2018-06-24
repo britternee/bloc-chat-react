@@ -4,7 +4,8 @@ class RoomList extends Component {
     constructor(props) {
         super (props);
         this.state = {
-            rooms: []
+            rooms: [],
+            newRoomName: ''
         };
 
         this.roomsRef = this.props.firebase.database().ref('rooms');
@@ -14,29 +15,34 @@ class RoomList extends Component {
         this.roomsRef.on('child_added', snapshot => {
             const room = snapshot.val();
             room.key = snapshot.key;
-            this.setState({ rooms: this.state.rooms.concat( room )})
+            this.setState({ rooms: this.state.rooms.concat( room ) })
         });
     }
 
-    createRoom = (e) => {this.setState({ newRoomName: e.target.value });
+    handleSubmit(e) {
+        this.setState({ newRoomName: e.target.value });
     }
 
-    handleSubmit = (newRoomName) => {
-    this.roomsRef.push({
-        name: newRoomName
+    createRoom(e) {
+        e.preventDefault();
+        if (!this.state.newRoomName) {return}
+        this.roomsRef.push({
+        name: this.state.newRoomName
     });
-    this.setState({newRoomName: ""});
-}
+        this.setState({newRoomName: ''})
+    }
+
+
 
     render() {
         return (
             <div>
                 <ul className="list-rooms">
-                    {this.state.rooms.map((room) =>
-                    <li key={room.key}>{room.name}</li>)}
+                    {this.state.rooms.map((room, index) =>
+                    <li key={index}>{room.name}</li>)}
                 </ul>
-                <form className="create-room-form" onSubmit={ (e) => {this.handleSubmit(this.state.newRoomName)} }>
-                    <input type="text" placeholder="Enter New Room Name" value={this.state.newRoomName} onChange={this.createRoom} />
+                <form className="create-room-form" onSubmit={ (e) => this.createRoom(e) }>
+                    <input type="text" placeholder="Enter New Room Name" value={ this.state.newRoomName } onChange={ (e) => this.handleSubmit(e) } />
                     <button className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Create New Room</button>
                 </form>
             </div>
