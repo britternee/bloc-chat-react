@@ -5,7 +5,7 @@ class RoomList extends Component {
         super (props);
         this.state = {
             rooms: [],
-            newRoomName: ''
+            newRoom: ''
         };
 
         this.roomsRef = this.props.firebase.database().ref('rooms');
@@ -20,16 +20,16 @@ class RoomList extends Component {
     }
 
     handleSubmit(e) {
-        this.setState({ newRoomName: e.target.value });
+        this.setState({ newRoom: e.target.value });
     }
 
     createRoom(e) {
         e.preventDefault();
-        if (!this.state.newRoomName) {return}
+        if (!this.state.newRoom) {return}
         this.roomsRef.push({
-        name: this.state.newRoomName
+        name: this.state.newRoom
     });
-        this.setState({newRoomName: ''})
+        this.setState({newRoom: ''})
     }
 
 
@@ -39,10 +39,10 @@ class RoomList extends Component {
             <div>
                 <ul className="list-rooms">
                     {this.state.rooms.map((room, index) =>
-                    <li key={index}>{room.name}</li>)}
+                    <li key={index} onClick={ () => this.props.selectActiveRoom(room)}>{room.name}</li>)}
                 </ul>
                 <form className="create-room-form" onSubmit={ (e) => this.createRoom(e) }>
-                    <input type="text" placeholder="Enter New Room Name" value={ this.state.newRoomName } onChange={ (e) => this.handleSubmit(e) } />
+                    <input type="text" placeholder="Enter New Room Name" value={ this.state.newRoom } onChange={ (e) => this.handleSubmit(e) } />
                     <button className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Create New Room</button>
                 </form>
             </div>
