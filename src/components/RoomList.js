@@ -25,18 +25,17 @@ class RoomList extends Component {
 
     createRoom(e) {
         e.preventDefault();
-        if (!this.state.newRoom) {return}
-        this.roomsRef.push({
-        name: this.state.newRoom
-    });
+        if (!this.state.newRoom) {
+            return
+        }
+        this.roomsRef.push({name: this.state.newRoom});
         this.setState({newRoom: ''})
     }
 
-
-
     render() {
         return (
-            <div>
+            <div className="room-area">
+                <h4>Available Chat Rooms</h4>
                 <ul className="list-rooms">
                     {this.state.rooms.map((room, index) =>
                     <li key={index} onClick={ () => this.props.selectActiveRoom(room)}>{room.name}</li>)}

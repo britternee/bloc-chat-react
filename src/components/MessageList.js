@@ -19,15 +19,17 @@ class MessageList extends Component {
 
     render(){
         return(
-            <div>
+            <div className="message-area">
                 <ul>
                 {this.state.messages.map((message, index)  => {
-                   if (this.props.activeRoom && (message.roomId === this.props.activeRoom.key)) {
-                   return (
-                   <li key={index}> {message.username} {message.sentAt}: {message.content}</li>)
-               }})
+                    if (this.props.activeRoom && (message.roomId === this.props.activeRoom.key)) {
+                        return (
+                        <li key={index}> {message.username} {message.sentAt}: {message.content}</li>)
+                } else {
+                    return null
+            }})
             }
-               </ul>
+                </ul>
             </div>
         );
 }
