@@ -22,9 +22,10 @@ class MessageList extends Component {
             <div>
                 <ul>
                 {this.state.messages.map((message, index)  => {
+                   if (this.props.activeRoom && (message.roomId === this.props.activeRoom.key)) {
                    return (
                    <li key={index}> {message.username} {message.sentAt}: {message.content}</li>)
-               })
+               }})
             }
                </ul>
             </div>
