@@ -4,7 +4,13 @@ class MessageList extends Component {
     constructor(props) {
         super (props);
         this.state = {
-            messages: []
+            messages: [],
+            message: {
+                content: '',
+                roomId: '',
+                username: '',
+                sentAt: ''
+            }
         }
         this.messagesRef = this.props.firebase.database().ref('messages');
     }
@@ -16,6 +22,31 @@ class MessageList extends Component {
             this.setState({ messages: this.state.messages.concat( message ) })
         });
     }
+
+    createMessages(e) {
+        e.preventDefault();
+        this.messagesRef.push({
+            content: this.state.message.content,
+            roomId: this.props.activeRoom.key,
+            username: this.props.user ? this.props.user.displayName : "Guest",
+            sentAt: this.props.firebase.database.ServerValue.TIMESTAMP
+        });
+        this.setState({
+            message:{
+                content: '',
+                roomId: '',
+                username: '',
+                sentAt: ''
+            }
+        })
+    }
+
+    handleEvent(e) {
+        this.setState({
+            message:{
+                content: e.target.value
+            }
+        })}
 
     render(){
         return(
@@ -30,6 +61,10 @@ class MessageList extends Component {
             }})
             }
                 </ul>
+                <form onSubmit={(e) => this.createMessages(e)}>
+                    <input type="text" placeholder="Type New Message" value={this.state.message.content} onChange={(e) => this.handleEvent(e)} />
+                    <button className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Send</button>
+                </form>
             </div>
         );
 }
